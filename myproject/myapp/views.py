@@ -1,7 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 # from .models import Feature
 from .models import Features
+
+# User registration
+from django.contrib.auth.models import User, auth
+from django.contrib import messages
 
 # Create your views here.
 def index(request):
@@ -15,7 +19,6 @@ def index(request):
         # 'nationality': 'British',
     # }
     # return render(request, 'index.html', context)
-
 
 
     # Introduction to Models (Basics)
@@ -68,3 +71,31 @@ def counter(request):
     # words = request.POST['text']
     # amount_of_words = len(words.split())
     # return render(request, 'counter.html', {'amount': amount_of_words})
+
+
+
+# User registration
+def register(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        email = request.POST['email']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+
+        if password1 == password2:
+            if User.objects.filter(email=email).exists():
+                messages.info(request, 'Email Already Used')
+                return redirect('register')
+            elif User.objects.filter(username=username).exists():
+                messages.info(request, 'Username Already Used')
+                return redirect('register')
+            else:
+                user = User.objects.create_user(username=username, email=email, password=password1)
+                user.save()
+                return redirect('login')
+        else:
+            messages.info(request, 'Password Not The Same')
+            return redirect('register')
+
+    else:
+        return render(request, 'register.html')
