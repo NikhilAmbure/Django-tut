@@ -66,11 +66,16 @@ def index(request):
 
 # Building a word Counter 
 def counter(request):
-    pass
     # words = request.GET['text']
     # words = request.POST['text']
     # amount_of_words = len(words.split())
     # return render(request, 'counter.html', {'amount': amount_of_words})
+
+
+
+    # Dynamic URL Routing
+    posts = [1, 2, 3, 4, 'john', 'tim', 'henry']
+    return render(request, 'counter.html', {'posts':posts})
 
 
 
@@ -99,3 +104,30 @@ def register(request):
 
     else:
         return render(request, 'register.html')
+    
+
+# User Login and Logout 
+def login(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = auth.authenticate(username=username, password=password)
+
+        if user is not None:
+            auth.login(request, user)
+            return redirect('/')
+        else:
+            messages.info(request, 'Crendentials Invalid')
+            return redirect('login')
+    else:
+        return render(request, 'login.html')
+
+def logout(request):
+    auth.logout(request)
+    return redirect('/')
+
+
+# Dynamic URL Routing
+def post(request, pk):
+    return render(request, 'post.html', {'pk': pk})

@@ -75,6 +75,7 @@
             <li><a href="#portfolio">Portfolio</a></li>
             <li><a href="#team">Team</a></li>
             <li><a href="blog.html">Blog</a></li>
+            
             <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
                 <li><a href="#">Dropdown 1</a></li>
@@ -93,6 +94,13 @@
               </ul>
             </li>
             <li><a href="#contact">Contact</a></li>
+
+            {% if user.is_authenticated %}
+            <li><a href="logout">Logout</a></li>
+            {% else %}
+            <li><a href="login">Login or signup</a></li>
+            {% endif %}
+
           </ul>
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
@@ -111,7 +119,11 @@
       <div class="container position-relative" data-aos="fade-up" data-aos-delay="100">
         <div class="row gy-5 justify-content-between">
           <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
+            {% if user.is_authenticated %}
+            <h2><span>Welcome, {{user.username}}</span><span class="accent"></span></h2>
+            {% else %}
             <h2><span>Welcome to </span><span class="accent">Impact</span></h2>
+            {% endif %}
             <p>Sed autem laudantium dolores. Voluptatem itaque ea consequatur eveniet. Eum quas beatae cumque eum quaerat.</p>
             <div class="d-flex">
               <a href="#about" class="btn-get-started">Get Started</a>
